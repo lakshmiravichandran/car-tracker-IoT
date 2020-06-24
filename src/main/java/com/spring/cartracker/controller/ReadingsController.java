@@ -30,6 +30,7 @@ public class ReadingsController {
             @ApiResponse(code = 500, message = "Internal Server Error")
     })
     public Readings postVehicleReadings(@RequestBody Readings readingsData){
+
         return readingsService.loadReadings(readingsData);
     }
 }
