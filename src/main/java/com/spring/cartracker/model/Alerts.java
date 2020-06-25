@@ -17,4 +17,6 @@ public class Alerts {
     public Alerts() {
         this.uniqueIdentifier = UUID.randomUUID().toString();
     }
+
+
 }

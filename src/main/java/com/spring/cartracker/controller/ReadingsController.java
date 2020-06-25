@@ -1,5 +1,6 @@
 package com.spring.cartracker.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.spring.cartracker.model.Readings;
 import com.spring.cartracker.service.ReadingsService;
 import io.swagger.annotations.ApiOperation;
@@ -29,8 +30,7 @@ public class ReadingsController {
             @ApiResponse(code = 400, message = "Bad Request"),
             @ApiResponse(code = 500, message = "Internal Server Error")
     })
-    public Readings postVehicleReadings(@RequestBody Readings readingsData){
-
+    public Readings postVehicleReadings(@RequestBody Readings readingsData) throws JsonProcessingException {
         return readingsService.loadReadings(readingsData);
     }
 }

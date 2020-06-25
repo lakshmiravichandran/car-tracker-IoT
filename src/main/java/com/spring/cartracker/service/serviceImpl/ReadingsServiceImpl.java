@@ -1,5 +1,6 @@
 package com.spring.cartracker.service.serviceImpl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.spring.cartracker.model.Readings;
 import com.spring.cartracker.repository.CarRepository;
 import com.spring.cartracker.repository.ReadingsRepository;
@@ -20,7 +21,7 @@ public class ReadingsServiceImpl implements ReadingsService {
         this.carRepository = carRepository;
     }
 
-    public Readings loadReadings(Readings readingsData) {
+    public Readings loadReadings(Readings readingsData) throws JsonProcessingException {
         System.out.println(readingsData);
         readingsRepository.save(readingsData);
         String carVin = readingsData.getVin();
