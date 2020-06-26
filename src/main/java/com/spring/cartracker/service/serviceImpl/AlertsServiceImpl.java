@@ -10,6 +10,8 @@ import com.spring.cartracker.repository.AlertsRepository;
 import com.spring.cartracker.service.AlertsService;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 @Service
 public class AlertsServiceImpl implements AlertsService {
@@ -27,11 +29,14 @@ public class AlertsServiceImpl implements AlertsService {
     // rules to assign alerts with priority for cars
     @Override
     public boolean assignAlerts(Car car, Readings readings) throws JsonProcessingException {
+        String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
         //Alerts alerts = new Alerts();
         if(readings.getEngineRpm() > car.getRedLineRpm()) {
             Alerts rpmAlerts = new Alerts();
+            rpmAlerts.setAlertMessage("High engine RPM alert");
             rpmAlerts.setPriority("HIGH");
             rpmAlerts.setVin(car.getVin());
+            rpmAlerts.setTimestamp(timeStamp);
             addAlerts(rpmAlerts);
             String message = objectMapper.writeValueAsString(rpmAlerts);
             alertsSns.send("Rule1 - HIGH priority",message);
@@ -39,8 +44,10 @@ public class AlertsServiceImpl implements AlertsService {
         }
         if(readings.getFuelVolume() < car.getMaxFuelVolume()*0.10) {
             Alerts fuelAlerts = new Alerts();
+            fuelAlerts.setAlertMessage("Low fuel alert");
             fuelAlerts.setPriority("MEDIUM");
             fuelAlerts.setVin(car.getVin());
+            fuelAlerts.setTimestamp(timeStamp);
             addAlerts(fuelAlerts);
             String message = objectMapper.writeValueAsString(fuelAlerts);
             alertsSns.send("Rule2 - MEDIUM priority",message);
@@ -51,8 +58,10 @@ public class AlertsServiceImpl implements AlertsService {
                 readings.getTires().getRearLeft() < 32 || readings.getTires().getRearLeft() > 36 ||
                 readings.getTires().getRearRight() < 32 || readings.getTires().getRearRight() > 36 ) {
             Alerts tireAlerts = new Alerts();
+            tireAlerts.setAlertMessage("Check tire pressure alert");
             tireAlerts.setPriority("LOW");
             tireAlerts.setVin(car.getVin());
+            tireAlerts.setTimestamp(timeStamp);
             addAlerts(tireAlerts);
             String message = objectMapper.writeValueAsString(tireAlerts);
             alertsSns.send("Rule3 - LOW priority",message);
@@ -60,8 +69,10 @@ public class AlertsServiceImpl implements AlertsService {
         }
         if(readings.isEngineCoolantLow() == true || readings.isCheckEngineLightOn() == true) {
             Alerts engineAlerts = new Alerts();
+            engineAlerts.setAlertMessage("Engine coolant low or engine light on alert");
             engineAlerts.setPriority("LOW");
             engineAlerts.setVin(car.getVin());
+            engineAlerts.setTimestamp(timeStamp);
             addAlerts(engineAlerts);
             String message = objectMapper.writeValueAsString(engineAlerts);
             alertsSns.send("Rule4 - LOW priority",message);
