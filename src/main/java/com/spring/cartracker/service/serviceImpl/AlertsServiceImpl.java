@@ -8,11 +8,17 @@ import com.spring.cartracker.model.Car;
 import com.spring.cartracker.model.Readings;
 import com.spring.cartracker.repository.AlertsRepository;
 import com.spring.cartracker.service.AlertsService;
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Array;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+
 @Service
 public class AlertsServiceImpl implements AlertsService {
     AlertsRepository alertsRepository;
@@ -29,7 +35,7 @@ public class AlertsServiceImpl implements AlertsService {
     // rules to assign alerts with priority for cars
     @Override
     public boolean assignAlerts(Car car, Readings readings) throws JsonProcessingException {
-        String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
+        String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
         //Alerts alerts = new Alerts();
         if(readings.getEngineRpm() > car.getRedLineRpm()) {
             Alerts rpmAlerts = new Alerts();
@@ -89,6 +95,28 @@ public class AlertsServiceImpl implements AlertsService {
 
     @Override
     public List<Alerts> getAllAlerts() {
-        return null;
+        List<Alerts> alertsList = (List<Alerts>) alertsRepository.findAll();
+        return alertsList;
+    }
+
+    @Override
+    public List<Alerts> getHighAlerts() {
+        List<Alerts> alertsList = (List<Alerts>) alertsRepository.findAll();
+        List<Alerts> alertsLastTwoHours = new ArrayList();
+        DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
+        DateTime now = new DateTime();
+        DateTime lastTwoHours = formatter.parseDateTime(now.toString("yyyy-MM-dd HH:mm:ss"));
+        lastTwoHours = lastTwoHours.minusHours(2);
+
+        System.out.println(lastTwoHours);
+        for (int i=0; i<alertsList.size(); i++) {
+            String alertTime = alertsList.get(i).getTimestamp();
+            DateTime alertTS = formatter.parseDateTime(alertTime);
+            if(alertsList.get(i).getPriority().equals("HIGH") &&  alertTS.isAfter(lastTwoHours)) {
+                alertsLastTwoHours.add(alertsList.get(i));
+            }
+        }
+        alertsLastTwoHours.sort(Comparator.comparing(Alerts::getTimestamp));
+        return alertsLastTwoHours;
     }
 }

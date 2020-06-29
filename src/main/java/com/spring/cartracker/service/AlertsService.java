@@ -11,4 +11,5 @@ public interface AlertsService {
     boolean assignAlerts(Car car, Readings readings) throws JsonProcessingException;
     boolean addAlerts(Alerts alerts);
     List<Alerts> getAllAlerts();
+    List<Alerts> getHighAlerts();
 }
