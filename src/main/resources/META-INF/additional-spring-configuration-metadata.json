@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "cloud.aws.rds.vehicledbinstance.password",
+      "type": "java.lang.String",
+      "description": "Description for cloud.aws.rds.vehicledbinstance.password."
+  }
+] }
