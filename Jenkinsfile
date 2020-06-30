@@ -23,7 +23,7 @@ node{
    stage('Run Container on Server'){
    try{
    sh "docker rm -f trackerapp || true "
-    sh "docker run --env-file /prop.env -p 8081:8081 -d --name trackerapp ${DOCKERHUB_REPO}:${DOCKER_IMAGE_VERSION}"
+    sh "docker run --env-file /prop.env -p 8085:8080 -d --name trackerapp ${DOCKERHUB_REPO}:${DOCKER_IMAGE_VERSION}"
    }
     catch (e) {
                error "Service update failed"
