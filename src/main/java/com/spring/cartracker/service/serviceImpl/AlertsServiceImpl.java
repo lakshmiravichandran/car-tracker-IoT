@@ -55,8 +55,8 @@ public class AlertsServiceImpl implements AlertsService {
             fuelAlerts.setVin(car.getVin());
             fuelAlerts.setTimestamp(timeStamp);
             addAlerts(fuelAlerts);
-            String message = objectMapper.writeValueAsString(fuelAlerts);
-            alertsSns.send("Rule2 - MEDIUM priority",message);
+            //String message = objectMapper.writeValueAsString(fuelAlerts);
+            //alertsSns.send("Rule2 - MEDIUM priority",message);
             //System.out.println("MEDIUM");
         }
         if(readings.getTires().getFrontLeft() < 32 || readings.getTires().getFrontLeft() > 36 ||
@@ -69,8 +69,8 @@ public class AlertsServiceImpl implements AlertsService {
             tireAlerts.setVin(car.getVin());
             tireAlerts.setTimestamp(timeStamp);
             addAlerts(tireAlerts);
-            String message = objectMapper.writeValueAsString(tireAlerts);
-            alertsSns.send("Rule3 - LOW priority",message);
+            //String message = objectMapper.writeValueAsString(tireAlerts);
+            //alertsSns.send("Rule3 - LOW priority",message);
             //System.out.println("LOW");
         }
         if(readings.isEngineCoolantLow() == true || readings.isCheckEngineLightOn() == true) {
@@ -80,8 +80,8 @@ public class AlertsServiceImpl implements AlertsService {
             engineAlerts.setVin(car.getVin());
             engineAlerts.setTimestamp(timeStamp);
             addAlerts(engineAlerts);
-            String message = objectMapper.writeValueAsString(engineAlerts);
-            alertsSns.send("Rule4 - LOW priority",message);
+            //String message = objectMapper.writeValueAsString(engineAlerts);
+            //alertsSns.send("Rule4 - LOW priority",message);
             //System.out.println("LOW");
         }
         return true;
@@ -118,5 +118,17 @@ public class AlertsServiceImpl implements AlertsService {
         }
         alertsLastTwoHours.sort(Comparator.comparing(Alerts::getTimestamp));
         return alertsLastTwoHours;
+    }
+
+    @Override
+    public List<Alerts> getAlertsByVin(String vin) {
+        List<Alerts> alertsList = (List<Alerts>) alertsRepository.findAll();
+        List<Alerts> alertsForVin = new ArrayList();
+        for (int i=0; i<alertsList.size(); i++) {
+            if(alertsList.get(i).getVin().equals(vin)) {
+                alertsForVin.add(alertsList.get(i));
+            }
+        }
+        return alertsForVin;
     }
 }

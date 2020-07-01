@@ -32,6 +32,18 @@ public class AlertsController {
         return alertsService.getAllAlerts();
     }
 
+    @GetMapping(path = "/getAlertsByVin/{vin}")
+    @ApiOperation(value="Endpoint to fetch all alerts of a car")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success"),
+            @ApiResponse(code = 201, message = "Created"),
+            @ApiResponse(code = 400, message = "Bad Request"),
+            @ApiResponse(code = 500, message = "Internal Server Error")
+    })
+    public List<Alerts> getAlertsByVin(@PathVariable String vin){
+        return alertsService.getAlertsByVin(vin);
+    }
+
     @GetMapping("/getRecentHighAlerts")
     @ApiOperation(value="Endpoint to fetch high alerts within last 2 hours for all the cars (sorted by time)")
     @ApiResponses(value = {

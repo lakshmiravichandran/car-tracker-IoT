@@ -12,4 +12,5 @@ public interface AlertsService {
     boolean addAlerts(Alerts alerts);
     List<Alerts> getAllAlerts();
     List<Alerts> getHighAlerts();
+    List<Alerts> getAlertsByVin(String vin);
 }
