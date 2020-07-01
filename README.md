@@ -10,6 +10,8 @@ API Endpoints supported -
 * PUT - /car/loadCarList
 * GET - /getCarAlerts
 * Endpoint to fetch high alerts within last 2 hours for all the cars (sorted by time) - GET - /getRecentHighAlerts
+* Endpoint to get geo information of a vehicle for last 30 mins - GET - /vehicle/getGeoInfoByVin/{vin}
+* GET - /getAlertsByVin/{vin}
 
 Supports email notifications with **AWS SNS** for high alert warnings - HIGH engine RPM alerts
 
